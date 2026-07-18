@@ -100,6 +100,13 @@
   --sidebar-accent-foreground: #1e1e2e;
   --sidebar-border: #e5e7eb;
   --sidebar-ring: #4f46e5;
+
+  /* Toast */
+  --toast-error-background: oklch(88.5% 0.062 18.334);
+  --toast-error-color: oklch(50.5% 0.213 27.518);
+
+  --toast-success-background: oklch(92.5% 0.084 155.995);
+  --toast-success-color: oklch(44.8% 0.119 151.328);
 }
 
 .dark {

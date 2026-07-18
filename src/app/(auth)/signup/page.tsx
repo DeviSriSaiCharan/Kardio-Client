@@ -1,6 +1,7 @@
-'use server';
+'use client';
 
 import Image from 'next/image';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -12,12 +13,51 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { toastError, toastSuccess } from '@/lib/toast';
+import { AuthResponse, SignUpRequest } from '@/types/auth';
+import { signUp } from '@/services/authService';
 
-export default async function SignUpPage() {
+export default function SignUpPage() {
   return <RightCard />;
 }
 
 function RightCard() {
+  const [signUpData, setSignUpData] = useState<SignUpRequest>({
+    name: '',
+    email: '',
+    password: '',
+  });
+  const [isLoading, setIsLoading] = useState(false);
+
+  function onChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {
+    const { value, name } = e.target;
+
+    const updatedData = { ...signUpData, [name]: value };
+    setSignUpData(updatedData);
+  }
+
+  async function handleSignUp(e: React.MouseEvent<HTMLButtonElement>) {
+    e.preventDefault();
+    setIsLoading(true);
+
+    if (!signUpData.name || !signUpData.email || !signUpData.password) {
+      toastError('Please fill in all fields');
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      const response: AuthResponse = await signUp(signUpData);
+      toastSuccess(response.message);
+    } catch (err) {
+      const error: string =
+        err instanceof Error ? err.message : 'Something went wrong';
+      toastError(`Error: ${error}`);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   return (
     <Card className="shadow-xs w-120 py-6">
       <CardHeader className="flex flex-col items-center">
@@ -41,28 +81,38 @@ function RightCard() {
             <Label className="">Full name</Label>
             <Input
               type="text"
+              name="name"
               placeholder="Charan"
               className="focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-0 h-10 rounded-md px-4"
+              onChange={onChangeHandler}
             />
           </div>
           <div className="flex flex-col gap-2">
             <Label className="">Email</Label>
             <Input
               type="email"
+              name="email"
               placeholder="charan@gmail.com"
               className="h-10 rounded-md focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-0 px-4"
+              onChange={onChangeHandler}
             />
           </div>
           <div className="flex flex-col gap-2">
             <Label className="">Password</Label>
             <Input
               type="password"
+              name="password"
               placeholder="At least 8 characters"
               minLength={8}
               className="h-10 rounded-md focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-0 px-4"
+              onChange={onChangeHandler}
             />
           </div>
-          <Button className="w-full py-6 text-base bg-primary text-primary-foreground hover:bg-primary/90 rounded-md hover:cursor-pointer">
+          <Button
+            className="w-full py-6 text-base bg-primary text-primary-foreground hover:bg-primary/90 rounded-md hover:cursor-pointer"
+            onClick={handleSignUp}
+            disabled={isLoading}
+          >
             Create account
           </Button>
           <p className="text-muted-foreground text-sm text-center">

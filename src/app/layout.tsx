@@ -5,6 +5,7 @@ import {
   Tangerine,
   Petit_Formal_Script,
 } from 'next/font/google';
+import { Toaster } from '@/components/ui/sonner';
 import './globals.css';
 
 const inter = Inter({
@@ -46,7 +47,10 @@ export default function RootLayout({
       lang="en"
       className={`${inter.variable} ${poppins.variable} ${tangerine.variable} ${pettit_formal_script.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        {children}
+        <Toaster />
+      </body>
     </html>
   );
 }
