@@ -121,7 +121,7 @@ function RightCard() {
               href="/signin"
               className="text-primary font-medium hover:underline"
             >
-              Log in
+              Sign in
             </a>
           </p>
         </form>
