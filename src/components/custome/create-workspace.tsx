@@ -35,12 +35,11 @@ export default function CreateWorkspace({
 
     setIsCreating(true);
     try {
-      const response = await createWorkspace({
+      await createWorkspace({
         title: workspaceName,
         description: workspaceDescription,
         workspaceColor: selectedColor,
       });
-      console.log('Workspace created:', response);
       toastSuccess('Workspace created successfully!');
       onSuccess();
     } catch (error) {
