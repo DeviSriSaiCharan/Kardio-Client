@@ -13,6 +13,7 @@ const apiClient = axios.create({
     'Content-Type': 'application/json',
   },
   timeout: 10_000, // 10 seconds
+  withCredentials: true, // Include cookies in cross-origin requests if needed
 });
 
 // ─── Request Interceptor ─────────────────────────────────────────────────────
@@ -28,7 +29,7 @@ apiClient.interceptors.request.use(
     }
     return config;
   },
-  (error: AxiosError) => Promise.reject(error),
+  (error: AxiosError) => Promise.reject(error)
 );
 
 // ─── Response Interceptor ────────────────────────────────────────────────────
@@ -46,10 +47,12 @@ apiClient.interceptors.response.use(
 
     // Bubble up a normalized error message
     const message =
-      error.response?.data?.message ?? error.message ?? 'An unexpected error occurred.';
+      error.response?.data?.message ??
+      error.message ??
+      'An unexpected error occurred.';
 
     return Promise.reject(new Error(message));
-  },
+  }
 );
 
 export default apiClient;
