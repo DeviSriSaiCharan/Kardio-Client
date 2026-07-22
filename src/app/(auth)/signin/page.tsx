@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -27,6 +28,7 @@ function RightCard() {
     password: '',
   });
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   function onChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {
     const { value, name } = e.target;
@@ -48,6 +50,7 @@ function RightCard() {
     try {
       const response: AuthResponse = await signIn(signInData);
       toastSuccess(response.message);
+      router.push('/dashboard');
     } catch (err) {
       const error: string =
         err instanceof Error ? err.message : 'Something went wrong';
